@@ -1,0 +1,125 @@
+
+/* =========================================
+   NAZEER GARMENTS - PREMIUM TYPOGRAPHY
+========================================= */
+
+:root {
+  --font-body: "DM Sans", sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+}
+
+body,
+button,
+input,
+textarea,
+select {
+  font-family: var(--font-body);
+}
+
+.font-luxury,
+.brand-logo,
+.brand-logo small,
+.hero-content h1,
+.section-heading h2,
+.newsletter-section h2,
+.category-content h3,
+.promo-content h2,
+.footer-logo,
+.footer-logo span,
+.coming-soon h1 {
+  font-family: var(--font-display);
+}
+
+/* Premium headings */
+
+.hero-content h1 {
+  font-weight: 400;
+  letter-spacing: -2px;
+  line-height: 1.08;
+}
+
+.section-heading h2,
+.newsletter-section h2 {
+  font-weight: 400;
+  letter-spacing: -1.2px;
+}
+
+.promo-content h2 {
+  font-weight: 400;
+  letter-spacing: -1.5px;
+}
+
+/* Brand identity */
+
+.brand-logo,
+.footer-logo {
+  font-weight: 600;
+  letter-spacing: 3px;
+}
+
+.brand-logo small,
+.footer-logo span {
+  font-family: var(--font-body);
+  font-weight: 500;
+  letter-spacing: 5px;
+}
+
+/* Product typography */
+
+.product-info h3 {
+  font-family: var(--font-body);
+  font-weight: 500;
+  letter-spacing: -0.2px;
+}
+
+.product-price {
+  font-weight: 600;
+  letter-spacing: 0.1px;
+}
+
+.product-category,
+.section-eyebrow,
+.hero-eyebrow {
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+
+/* Refined interactions */
+
+.text-link,
+.primary-button,
+.light-button,
+.quick-add {
+  font-family: var(--font-body);
+  transition:
+    color 0.3s ease,
+    background 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.primary-button:hover,
+.light-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(37, 35, 31, 0.12);
+}
+
+.category-card,
+.product-image-wrap {
+  border-radius: 2px;
+}
+
+@media (max-width: 760px) {
+  .hero-content h1 {
+    letter-spacing: -1.5px;
+  }
+
+  .section-heading h2,
+  .newsletter-section h2 {
+    letter-spacing: -0.6px;
+  }
+
+  .promo-content h2 {
+    letter-spacing: -1px;
+  }
+}
