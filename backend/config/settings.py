@@ -29,8 +29,7 @@ if not SECRET_KEY:
         "or in Render Environment Variables."
     )
 
-DEBUG = os.getenv("DEBUG", "True").lower() == "true"
-
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 ALLOWED_HOSTS = [
     host.strip()
     for host in os.getenv(
@@ -277,19 +276,31 @@ DEFAULT_FROM_EMAIL = os.getenv(
 
 FRONTEND_URL = os.getenv(
     "FRONTEND_URL",
-    "http://localhost:5173"
+    "https://nazeergarments.vercel.app"
 ).rstrip("/")
 
 
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
+
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
         },
     },
+
+    "root": {
+        "handlers": ["console"],
+        "level": "ERROR",
+    },
+
     "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "ERROR",
+            "propagate": False,
+        },
         "django.request": {
             "handlers": ["console"],
             "level": "ERROR",
