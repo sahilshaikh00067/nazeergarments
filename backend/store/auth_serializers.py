@@ -102,6 +102,7 @@ class RegisterSerializer(serializers.Serializer):
         return user
 
 
+
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(
@@ -113,19 +114,25 @@ class LoginSerializer(serializers.Serializer):
         email = attrs["email"].strip().lower()
         password = attrs["password"]
 
-        users = User.objects.filter(email__iexact=email)
+        # Find all active accounts with this email
+        users = User.objects.filter(
+            email__iexact=email,
+            is_active=True
+        )
 
-        if users.count() != 1:
+        # Check which account matches the supplied password
+        matching_users = [
+            user for user in users
+            if user.check_password(password)
+        ]
+
+        # Reject if no account or multiple accounts match
+        if len(matching_users) != 1:
             raise serializers.ValidationError({
                 "detail": "Invalid email or password."
             })
 
-        user = users.first()
-
-        if not user.check_password(password) or not user.is_active:
-            raise serializers.ValidationError({
-                "detail": "Invalid email or password."
-            })
+        user = matching_users[0]
 
         attrs["user"] = user
         return attrs
