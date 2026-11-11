@@ -8,3 +8,4 @@ python-dotenv
 gunicorn
 djangorestframework-simplejwt==5.5.1
 Pillow>=10.0.0
+whitenoise
