@@ -54,6 +54,22 @@ const categories = [
 
 const normalizeOption = (value) => String(value || "").trim().toLowerCase();
 
+const getProductCategory = (product) => {
+    const category = product?.category;
+
+    if (typeof category === "string") {
+        return normalizeOption(category);
+    }
+
+    if (category && typeof category === "object") {
+        return normalizeOption(
+            category.slug || category.name
+        );
+    }
+
+    return normalizeOption(product?.categoryLabel);
+};
+
 const isVariantInStock = (variant) =>
     variant.is_available !== false && Number(variant.stock || 0) > 0;
 
@@ -507,7 +523,7 @@ function FilterPanel({
 function ShopProductCard({ product, onAddToCart, liked, onToggleWishlist, added }) {
     const navigate = useNavigate();
 
-const original = Number(product.originalPrice || 0);
+    const original = Number(product.originalPrice || 0);
     const discount =
         original > product.price
             ? Math.round(((original - product.price) / original) * 100)
@@ -955,8 +971,7 @@ export default function Shop() {
         } else if (activeCategory !== "all") {
             result = result.filter(
                 (product) =>
-                    normalizeOption(product.category?.slug || product.category?.name) ===
-                    normalizeOption(activeCategory)
+                    getProductCategory(product) === normalizeOption(activeCategory)
             );
         }
 
