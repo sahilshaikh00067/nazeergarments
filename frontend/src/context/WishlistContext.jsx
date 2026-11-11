@@ -59,7 +59,7 @@ export function WishlistProvider({ children }) {
       return;
     }
 
-    loadWishlist().catch(() => {});
+    loadWishlist().catch(() => { });
   }, [authLoading, isAuthenticated, loadWishlist]);
 
   const addItem = async (productId) => {
@@ -74,22 +74,22 @@ export function WishlistProvider({ children }) {
     return result;
   };
 
-const removeItem = async (productId) => {
-  await removeFromWishlist(productId);
+  const removeItem = async (productId) => {
+    await removeFromWishlist(productId);
 
-  setWishlist((current) =>
-    current.filter(
+    setWishlist((current) =>
+      current.filter(
+        (item) =>
+          Number(item?.product?.id) !== Number(productId)
+      )
+    );
+  };
+
+  const isWishlisted = (productId) =>
+    wishlist.some(
       (item) =>
-        Number(item?.product?.id) !== Number(productId)
-    )
-  );
-};
-
-const isWishlisted = (productId) =>
-  wishlist.some(
-    (item) =>
-      Number(item?.product?.id) === Number(productId)
-  );
+        Number(item?.product?.id) === Number(productId)
+    );
 
   return (
     <WishlistContext.Provider

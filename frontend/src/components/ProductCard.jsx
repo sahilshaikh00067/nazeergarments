@@ -31,32 +31,40 @@ export default function ProductCard({ product, onAddToCart }) {
     ? Math.round(((originalPrice - price) / originalPrice) * 100)
     : 0;
 
-  const handleWishlist = async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+const handleWishlist = async (e) => {
+  e.preventDefault();
+  e.stopPropagation();
 
-    if (!isAuthenticated) {
-      navigate("/login");
-      return;
+  if (!isAuthenticated) {
+    navigate("/login");
+    return;
+  }
+
+  if (wishlistLoading) return;
+
+  setWishlistLoading(true);
+
+  try {
+    if (liked) {
+      await removeItem(product.id);
+      console.log("Wishlist: Product removed", product.id);
+    } else {
+      await addItem(product.id);
+      console.log("Wishlist: Product added", product.id);
     }
-
-    if (wishlistLoading) return;
-
-    setWishlistLoading(true);
-
-    try {
-      if (liked) {
-        await removeItem(product.id);
-      } else {
-        await addItem(product.id);
-      }
-    } catch (error) {
-      console.error("Wishlist update failed:", error);
-      console.error("API response:", error.response?.data);
-    } finally {
-      setWishlistLoading(false);
-    }
-  };
+  } catch (error) {
+    console.error("Wishlist error:", error);
+    console.error("Status:", error.response?.status);
+    console.error("Response:", error.response?.data);
+    alert(
+      error.response?.data?.message ||
+      error.response?.data?.detail ||
+      "Wishlist update failed. Please try again."
+    );
+  } finally {
+    setWishlistLoading(false);
+  }
+};
 
   const openProduct = () => {
     if (product.slug) {
@@ -109,25 +117,22 @@ export default function ProductCard({ product, onAddToCart }) {
         )}
 
         {/* WISHLIST */}
-        <button
-          type="button"
-          onClick={handleWishlist}
-          disabled={wishlistLoading}
-          aria-label={
-            liked ? "Remove from wishlist" : "Add to wishlist"
-          }
-          aria-pressed={liked}
-          className={`absolute right-3 top-3 z-20 grid h-9 w-9 place-items-center rounded-full bg-white shadow-md transition-all duration-300 hover:scale-110 sm:right-4 sm:top-4 sm:h-10 sm:w-10 ${liked
-            ? "text-rose-600"
-            : "text-[#25231F] hover:text-rose-600"
-            } ${wishlistLoading ? "cursor-wait opacity-60" : ""}`}
-        >
-          <Heart
-            size={17}
-            strokeWidth={1.7}
-            fill={liked ? "currentColor" : "none"}
-          />
-        </button>
+<button
+  type="button"
+  onClick={handleWishlist}
+  disabled={wishlistLoading}
+  aria-label={liked ? "Remove from wishlist" : "Add to wishlist"}
+  aria-pressed={liked}
+  className={`absolute right-3 top-3 z-30 grid h-10 w-10 place-items-center rounded-full bg-white shadow-md ${
+    liked ? "text-rose-600" : "text-[#25231F]"
+  } ${wishlistLoading ? "cursor-wait opacity-60" : ""}`}
+>
+  <Heart
+    size={17}
+    strokeWidth={1.7}
+    fill={liked ? "currentColor" : "none"}
+  />
+</button>
 
         {/* QUICK ADD */}
         <button

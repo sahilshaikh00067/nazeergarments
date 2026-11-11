@@ -103,7 +103,11 @@ export function CartProvider({ children }) {
                     variantId,
                     slug: product.slug,
                     name: product.name,
-                    image: product.image || "",
+                    image:
+                        options.image ||
+                        product.images?.[0]?.image ||
+                        product.image ||
+                        "",
                     price: unitPrice,
                     quantity,
                     stock,

@@ -177,8 +177,8 @@ function Toast({ toast }) {
         toast?.type === "error"
             ? "bg-red-500"
             : toast?.type === "success"
-            ? "bg-[#718B66]"
-            : "bg-[#B89B72]";
+                ? "bg-[#718B66]"
+                : "bg-[#B89B72]";
 
     return (
         <AnimatePresence>
@@ -375,14 +375,12 @@ function FilterPanel({
                                 type="button"
                                 key={category.value}
                                 onClick={() => selectCategory(category.value)}
-                                className={`group flex w-full items-center gap-3 text-left text-xs transition-all duration-300 hover:translate-x-1 ${
-                                    active ? "font-semibold text-[#25231F]" : "text-[#817B72] hover:text-[#25231F]"
-                                }`}
+                                className={`group flex w-full items-center gap-3 text-left text-xs transition-all duration-300 hover:translate-x-1 ${active ? "font-semibold text-[#25231F]" : "text-[#817B72] hover:text-[#25231F]"
+                                    }`}
                             >
                                 <span
-                                    className={`grid h-4 w-4 place-items-center rounded-full border transition-colors duration-300 ${
-                                        active ? "border-[#B89B72]" : "border-[#D8D1C6]"
-                                    }`}
+                                    className={`grid h-4 w-4 place-items-center rounded-full border transition-colors duration-300 ${active ? "border-[#B89B72]" : "border-[#D8D1C6]"
+                                        }`}
                                 >
                                     <motion.span
                                         initial={false}
@@ -433,11 +431,10 @@ function FilterPanel({
                                     onClick={() => toggleSize(size)}
                                     whileHover={{ y: -2 }}
                                     whileTap={{ scale: 0.92 }}
-                                    className={`relative min-w-10 border px-3 py-2 text-[10px] transition-colors duration-300 ${
-                                        selected
-                                            ? "border-[#25231F] bg-[#25231F] text-white"
-                                            : "border-[#E2DCD2] text-[#817B72] hover:border-[#B89B72]"
-                                    }`}
+                                    className={`relative min-w-10 border px-3 py-2 text-[10px] transition-colors duration-300 ${selected
+                                        ? "border-[#25231F] bg-[#25231F] text-white"
+                                        : "border-[#E2DCD2] text-[#817B72] hover:border-[#B89B72]"
+                                        }`}
                                 >
                                     {size}
                                 </motion.button>
@@ -470,11 +467,10 @@ function FilterPanel({
                                     className="group flex w-full items-center gap-3 text-xs text-[#817B72] transition-all duration-300 hover:translate-x-1 hover:text-[#25231F]"
                                 >
                                     <span
-                                        className={`grid h-5 w-5 place-items-center rounded-full border transition-all duration-300 group-hover:scale-110 ${
-                                            selected
-                                                ? "border-[#25231F] ring-2 ring-[#B89B72] ring-offset-2"
-                                                : "border-[#D8D1C6]"
-                                        }`}
+                                        className={`grid h-5 w-5 place-items-center rounded-full border transition-all duration-300 group-hover:scale-110 ${selected
+                                            ? "border-[#25231F] ring-2 ring-[#B89B72] ring-offset-2"
+                                            : "border-[#D8D1C6]"
+                                            }`}
                                         style={{ backgroundColor: color.hex }}
                                     >
                                         {selected && (
@@ -511,7 +507,7 @@ function FilterPanel({
 function ShopProductCard({ product, onAddToCart, liked, onToggleWishlist, added }) {
     const navigate = useNavigate();
 
-    const original = Number(product.originalPrice || 0);
+    const original = Number(product.mrp || 0);
     const discount =
         original > product.price
             ? Math.round(((original - product.price) / original) * 100)
@@ -528,9 +524,12 @@ function ShopProductCard({ product, onAddToCart, liked, onToggleWishlist, added 
                         aria-label={`View ${product.name}`}
                     >
                         <img
-                            src={product.image}
+                            src={product.images?.[0]?.image || ""}
                             alt={product.name}
                             loading="lazy"
+                            onError={(e) => {
+                                e.currentTarget.style.display = "none";
+                            }}
                             className="h-full w-full object-cover transition duration-[1200ms] ease-out group-hover:scale-110"
                         />
                     </button>
@@ -555,20 +554,23 @@ function ShopProductCard({ product, onAddToCart, liked, onToggleWishlist, added 
 
                     <motion.button
                         type="button"
-                        onClick={() => onToggleWishlist(product.id)}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onToggleWishlist(product.id);
+                        }}
                         aria-label={liked ? "Remove from wishlist" : "Add to wishlist"}
+                        aria-pressed={liked}
                         whileHover={{ scale: 1.15 }}
                         whileTap={{ scale: 0.8 }}
-                        className={`absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-white shadow-md transition-colors duration-300 ${
-                            liked ? "text-rose-600" : "text-[#25231F] hover:text-rose-500"
-                        }`}
+                        className={`absolute right-3 top-3 z-30 grid h-10 w-10 place-items-center rounded-full bg-white shadow-md ${liked ? "text-rose-600" : "text-[#25231F] hover:text-rose-500"
+                            }`}
                     >
                         <motion.span
                             key={liked ? "on" : "off"}
                             initial={{ scale: 0.4 }}
                             animate={{ scale: 1 }}
                             transition={{ type: "spring", stiffness: 500, damping: 14 }}
-                            className="grid place-items-center"
                         >
                             <FaHeart size={15} />
                         </motion.span>
@@ -576,12 +578,15 @@ function ShopProductCard({ product, onAddToCart, liked, onToggleWishlist, added 
 
                     <button
                         type="button"
-                        onClick={() => onAddToCart(product)}
-                        className={`absolute bottom-3 left-3 right-3 z-10 flex translate-y-3 items-center justify-center gap-2 py-3 text-[10px] font-semibold tracking-[1.5px] opacity-0 shadow-lg backdrop-blur transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 focus:translate-y-0 focus:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100 ${
-                            added
-                                ? "bg-[#718B66] text-white"
-                                : "bg-white/95 text-[#25231F] hover:bg-[#25231F] hover:text-white"
-                        }`}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onAddToCart(product);
+                        }}
+                        className={`absolute bottom-3 left-3 right-3 z-10 flex translate-y-3 items-center justify-center gap-2 py-3 text-[10px] font-semibold tracking-[1.5px] opacity-0 shadow-lg backdrop-blur transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 focus:translate-y-0 focus:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100 ${added
+                            ? "bg-[#718B66] text-white"
+                            : "bg-white/95 text-[#25231F] hover:bg-[#25231F] hover:text-white"
+                            }`}
                     >
                         <AnimatePresence mode="wait" initial={false}>
                             {added ? (
@@ -948,7 +953,11 @@ export default function Shop() {
         if (activeCategory === "new-arrivals") {
             result = result.filter((product) => product.isNew);
         } else if (activeCategory !== "all") {
-            result = result.filter((product) => product.category === activeCategory);
+            result = result.filter(
+                (product) =>
+                    normalizeOption(product.category?.slug || product.category?.name) ===
+                    normalizeOption(activeCategory)
+            );
         }
 
         if (search.trim()) {
@@ -1176,11 +1185,10 @@ export default function Shop() {
                                 <button
                                     key={category.value}
                                     onClick={() => selectCategory(category.value)}
-                                    className={`relative shrink-0 border px-5 py-3 text-[10px] font-semibold tracking-[1.2px] transition-colors duration-300 ${
-                                        active
-                                            ? "border-[#25231F] text-white"
-                                            : "border-[#E2DCD2] text-[#817B72] hover:border-[#B89B72] hover:text-[#25231F]"
-                                    }`}
+                                    className={`relative shrink-0 border px-5 py-3 text-[10px] font-semibold tracking-[1.2px] transition-colors duration-300 ${active
+                                        ? "border-[#25231F] text-white"
+                                        : "border-[#E2DCD2] text-[#817B72] hover:border-[#B89B72] hover:text-[#25231F]"
+                                        }`}
                                 >
                                     {active && (
                                         <motion.span
@@ -1271,9 +1279,8 @@ export default function Shop() {
                                     type="button"
                                     onClick={() => setDense(false)}
                                     aria-label="Larger cards"
-                                    className={`grid h-10 w-10 place-items-center transition-colors duration-300 ${
-                                        !dense ? "bg-[#25231F] text-white" : "text-[#817B72] hover:text-[#25231F]"
-                                    }`}
+                                    className={`grid h-10 w-10 place-items-center transition-colors duration-300 ${!dense ? "bg-[#25231F] text-white" : "text-[#817B72] hover:text-[#25231F]"
+                                        }`}
                                 >
                                     <FaThLarge size={13} />
                                 </button>
@@ -1281,9 +1288,8 @@ export default function Shop() {
                                     type="button"
                                     onClick={() => setDense(true)}
                                     aria-label="Compact cards"
-                                    className={`grid h-10 w-10 place-items-center transition-colors duration-300 ${
-                                        dense ? "bg-[#25231F] text-white" : "text-[#817B72] hover:text-[#25231F]"
-                                    }`}
+                                    className={`grid h-10 w-10 place-items-center transition-colors duration-300 ${dense ? "bg-[#25231F] text-white" : "text-[#817B72] hover:text-[#25231F]"
+                                        }`}
                                 >
                                     <FaTh size={13} />
                                 </button>
@@ -1359,9 +1365,8 @@ export default function Shop() {
                                 <>
                                     <motion.div
                                         layout
-                                        className={`grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 ${
-                                            dense ? "md:grid-cols-3 xl:grid-cols-4" : "md:grid-cols-2 xl:grid-cols-3"
-                                        }`}
+                                        className={`grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 ${dense ? "md:grid-cols-3 xl:grid-cols-4" : "md:grid-cols-2 xl:grid-cols-3"
+                                            }`}
                                     >
                                         <AnimatePresence mode="popLayout">
                                             {visibleProducts.map((product, i) => (

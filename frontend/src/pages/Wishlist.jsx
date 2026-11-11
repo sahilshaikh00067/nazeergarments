@@ -242,9 +242,8 @@ function ImageSlider({ images, alt, onOpen }) {
                   e.stopPropagation();
                   setIndex(i);
                 }}
-                className={`h-[3px] rounded-full bg-white shadow transition-all duration-500 ${
-                  i === index ? "w-6" : "w-2 opacity-70"
-                }`}
+                className={`h-[3px] rounded-full bg-white shadow transition-all duration-500 ${i === index ? "w-6" : "w-2 opacity-70"
+                  }`}
               />
             ))}
           </div>
@@ -295,11 +294,10 @@ function SortMenu({ value, onChange }) {
 
       <div
         role="listbox"
-        className={`absolute right-0 z-30 mt-2 w-56 origin-top-right border border-[#E7E1D5] bg-white py-1 shadow-xl transition duration-200 ${
-          open
+        className={`absolute right-0 z-30 mt-2 w-56 origin-top-right border border-[#E7E1D5] bg-white py-1 shadow-xl transition duration-200 ${open
             ? "pointer-events-auto scale-100 opacity-100"
             : "pointer-events-none scale-95 opacity-0"
-        }`}
+          }`}
       >
         {SORTS.map((s) => (
           <button
@@ -414,13 +412,12 @@ export default function WishlistPro() {
         {/* timer pill or spacer to keep the title centred */}
         {wishlist?.length > 0 ? (
           <div
-            className={`flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs tabular-nums transition-colors ${
-              timer.expired
+            className={`flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs tabular-nums transition-colors ${timer.expired
                 ? "border-[#DDD6C9] bg-white text-[#7A746B]"
                 : timer.urgent
-                ? "wp-urgent border-red-300 bg-red-50 text-red-700"
-                : "border-[#DDD6C9] bg-white text-[#1F1D1A]"
-            }`}
+                  ? "wp-urgent border-red-300 bg-red-50 text-red-700"
+                  : "border-[#DDD6C9] bg-white text-[#1F1D1A]"
+              }`}
           >
             <Clock size={13} />
             {timer.expired ? "Hold ended" : `Held ${timer.label}`}
@@ -491,9 +488,8 @@ export default function WishlistPro() {
                 <div key={k} className="px-5 py-4 sm:px-8">
                   <dt className="text-[11px] text-[#7A746B]">{k}</dt>
                   <dd
-                    className={`mt-1 font-serif text-lg tabular-nums sm:text-2xl ${
-                      accent ? "text-[#2E7D4F]" : "text-[#1F1D1A]"
-                    }`}
+                    className={`mt-1 font-serif text-lg tabular-nums sm:text-2xl ${accent ? "text-[#2E7D4F]" : "text-[#1F1D1A]"
+                      }`}
                   >
                     {v}
                   </dd>
@@ -540,9 +536,8 @@ export default function WishlistPro() {
                   </p>
                   <div className="mt-2 h-[3px] w-full overflow-hidden bg-[#EFE9DC]">
                     <div
-                      className={`h-full transition-all duration-1000 ease-linear ${
-                        timer.urgent ? "bg-red-500" : "bg-[#A8895A]"
-                      }`}
+                      className={`h-full transition-all duration-1000 ease-linear ${timer.urgent ? "bg-red-500" : "bg-[#A8895A]"
+                        }`}
                       style={{ width: `${timer.progress * 100}%` }}
                     />
                   </div>
@@ -667,9 +662,8 @@ export default function WishlistPro() {
       {/* TOAST */}
       <div
         aria-live="polite"
-        className={`pointer-events-none fixed bottom-6 left-1/2 z-50 -translate-x-1/2 transition-all duration-500 ${
-          toast ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
-        }`}
+        className={`pointer-events-none fixed bottom-6 left-1/2 z-50 -translate-x-1/2 transition-all duration-500 ${toast ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0"
+          }`}
       >
         <div className="flex items-center gap-3 bg-[#1F1D1A] px-5 py-3 text-xs text-white shadow-2xl">
           <span className="flex h-5 w-5 items-center justify-center rounded-full bg-[#A8895A]">
