@@ -17,7 +17,6 @@ import MyOrders from "./pages/MyOrders";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
-// import WhatsAppButton from "./components/WhatsAppButton";
 
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminOrders from "./pages/AdminOrders";
@@ -27,6 +26,7 @@ import AdminProducts from "./pages/admin/AdminProducts";
 import AdminCategories from "./pages/admin/AdminCategories";
 import AdminCustomers from "./pages/admin/AdminCustomers";
 import AdminSettings from "./pages/admin/AdminSettings";
+import WhatsAppButton from "./components/WhatsAppButton";
 
 function App() {
   return (
@@ -68,7 +68,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
 
-      {/* <WhatsAppButton /> */}
+      <WhatsAppButton />
     </>
   );
 }
