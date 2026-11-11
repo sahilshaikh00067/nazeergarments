@@ -43,7 +43,7 @@ const coarsePointer = () =>
   window.matchMedia?.("(pointer: coarse)").matches;
 
 const getImages = (p) => {
-const list = (p.images || [])
+  const list = (p.images || [])
     .map(i => typeof i === "string" ? i : i?.image)
     .filter(Boolean);
   return list.length ? list : p.image ? [p.image] : [];
@@ -295,8 +295,8 @@ function SortMenu({ value, onChange }) {
       <div
         role="listbox"
         className={`absolute right-0 z-30 mt-2 w-56 origin-top-right border border-[#E7E1D5] bg-white py-1 shadow-xl transition duration-200 ${open
-            ? "pointer-events-auto scale-100 opacity-100"
-            : "pointer-events-none scale-95 opacity-0"
+          ? "pointer-events-auto scale-100 opacity-100"
+          : "pointer-events-none scale-95 opacity-0"
           }`}
       >
         {SORTS.map((s) => (
@@ -413,10 +413,10 @@ export default function WishlistPro() {
         {wishlist?.length > 0 ? (
           <div
             className={`flex items-center gap-2 rounded-full border px-3.5 py-2 text-xs tabular-nums transition-colors ${timer.expired
-                ? "border-[#DDD6C9] bg-white text-[#7A746B]"
-                : timer.urgent
-                  ? "wp-urgent border-red-300 bg-red-50 text-red-700"
-                  : "border-[#DDD6C9] bg-white text-[#1F1D1A]"
+              ? "border-[#DDD6C9] bg-white text-[#7A746B]"
+              : timer.urgent
+                ? "wp-urgent border-red-300 bg-red-50 text-red-700"
+                : "border-[#DDD6C9] bg-white text-[#1F1D1A]"
               }`}
           >
             <Clock size={13} />

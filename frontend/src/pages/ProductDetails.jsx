@@ -61,8 +61,26 @@ const colorOptions = {
     Gold: "#C6A15B",
 };
 
-const toUrl = (x) => (typeof x === "string" ? x : x?.image || x?.url || x?.src || "");
+const toUrl = (value) => {
+    if (!value) return "";
 
+    if (typeof value === "string") {
+        return value;
+    }
+
+    if (typeof value === "object") {
+        return (
+            value.image ||
+            value.image_url ||
+            value.url ||
+            value.src ||
+            value.file ||
+            ""
+        );
+    }
+
+    return "";
+};
 const fadeUp = {
     hidden: { opacity: 0, y: 28 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: EASE } },
@@ -402,9 +420,13 @@ function Gallery({ images, name, badge, wishlisted, onWishlist, index, setIndex 
                             className="absolute inset-0"
                         >
                             <motion.img
-                                src={images[index]}
+                                src={images[index] || ""}
                                 alt={name}
                                 draggable={false}
+                                onError={(e) => {
+                                    console.error("Product image failed:", e.currentTarget.src);
+                                    e.currentTarget.style.display = "none";
+                                }}
                                 style={{ transformOrigin: origin }}
                                 animate={{ scale: zoom ? 1.9 : 1 }}
                                 transition={{ duration: 0.6, ease: EASE }}
@@ -741,6 +763,8 @@ export default function ProductDetails() {
         ...new Set(
             [
                 product.image,
+                product.image_url,
+                product.thumbnail,
                 ...(Array.isArray(product.images) ? product.images : []),
                 ...(Array.isArray(product.gallery) ? product.gallery : []),
             ]
@@ -748,6 +772,7 @@ export default function ProductDetails() {
                 .filter(Boolean)
         ),
     ];
+
 
     const sizeAvailable = (size) =>
         variants.length === 0 ||
@@ -811,13 +836,20 @@ export default function ProductDetails() {
     };
 
     const toggleWishlist = async () => {
+        if (!product?.id) {
+            showToast("Product information is not available.", "error");
+            return;
+        }
+
         if (!isAuthenticated) {
-            showToast("Please login to add products to your wishlist.", "error");
+            showToast("Please login to use your wishlist.", "error");
             navigate("/login");
             return;
         }
 
         try {
+            console.log("ProductDetails wishlist clicked:", product.id);
+
             if (isWishlisted(product.id)) {
                 await removeWishlistItem(product.id);
                 showToast("Product removed from wishlist.", "info");
@@ -826,8 +858,12 @@ export default function ProductDetails() {
                 showToast("Product added to wishlist.", "success");
             }
         } catch (error) {
+            console.error("ProductDetails wishlist error:", error);
+            console.error("API response:", error.response?.data);
+
             showToast(
                 error.response?.data?.message ||
+                error.response?.data?.detail ||
                 error.message ||
                 "Unable to update wishlist.",
                 "error"
@@ -1067,10 +1103,10 @@ export default function ProductDetails() {
                                                 whileHover={{ y: -2 }}
                                                 whileTap={{ scale: 0.94 }}
                                                 className={`relative min-w-12 border px-4 py-3 text-xs transition-colors duration-300 ${active
-                                                        ? "border-[#25231F] text-white"
-                                                        : available
-                                                            ? "border-[#DCD4C8] hover:border-[#B89B72]"
-                                                            : "border-[#E9E3DA] text-[#B5AEA3] line-through"
+                                                    ? "border-[#25231F] text-white"
+                                                    : available
+                                                        ? "border-[#DCD4C8] hover:border-[#B89B72]"
+                                                        : "border-[#E9E3DA] text-[#B5AEA3] line-through"
                                                     }`}
                                             >
                                                 {active && (
