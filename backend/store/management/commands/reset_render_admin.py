@@ -46,6 +46,29 @@ class Command(BaseCommand):
                 "is_superuser",
             ])
 
+        email_matches = User.objects.filter(
+            email__iexact=user.email
+        ).count()
+        
+        self.stdout.write("\n========== ADMIN LOGIN CHECK ==========")
+        self.stdout.write(f"Username: {user.username}")
+        self.stdout.write(f"Email: {user.email}")
+        self.stdout.write(f"Email matches in database: {email_matches}")
+        self.stdout.write(f"Password verification: {user.check_password(password)}")
+        self.stdout.write(f"Account active: {user.is_active}")
+        self.stdout.write(f"Staff permission: {user.is_staff}")
+        self.stdout.write(f"Superuser permission: {user.is_superuser}")
+        self.stdout.write("=======================================\n")
+        
+        if email_matches != 1:
+            raise CommandError(
+                "Admin email is duplicated or missing. Login cannot identify one account."
+            )
+        
+        if not user.check_password(password) or not user.is_active:
+            raise CommandError("Admin credentials verification failed.")
+        
         self.stdout.write(self.style.SUCCESS(
-            "Existing admin password and permissions updated successfully."
+            "ADMIN LOGIN VERIFIED SUCCESSFULLY"
         ))
+        
