@@ -507,7 +507,7 @@ function FilterPanel({
 function ShopProductCard({ product, onAddToCart, liked, onToggleWishlist, added }) {
     const navigate = useNavigate();
 
-    const original = Number(product.mrp || 0);
+const original = Number(product.originalPrice || 0);
     const discount =
         original > product.price
             ? Math.round(((original - product.price) / original) * 100)
@@ -524,7 +524,7 @@ function ShopProductCard({ product, onAddToCart, liked, onToggleWishlist, added 
                         aria-label={`View ${product.name}`}
                     >
                         <img
-                            src={product.images?.[0]?.image || ""}
+                            src={product.image || product.images?.[0] || ""}
                             alt={product.name}
                             loading="lazy"
                             onError={(e) => {

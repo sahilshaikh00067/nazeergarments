@@ -40,6 +40,8 @@ export function WishlistProvider({ children }) {
         : [];
 
       setWishlist(items);
+
+
       return items;
     } catch (error) {
       console.error("Wishlist loading failed:", error);

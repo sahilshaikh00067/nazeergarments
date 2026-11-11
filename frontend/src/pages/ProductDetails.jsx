@@ -306,8 +306,8 @@ function Toast({ toast }) {
         toast?.type === "error"
             ? "bg-red-500"
             : toast?.type === "success"
-            ? "bg-[#718B66]"
-            : "bg-[#B89B72]";
+                ? "bg-[#718B66]"
+                : "bg-[#B89B72]";
 
     return (
         <AnimatePresence>
@@ -430,9 +430,8 @@ function Gallery({ images, name, badge, wishlisted, onWishlist, index, setIndex 
                         aria-label={wishlisted ? "Remove from wishlist" : "Add to wishlist"}
                         whileHover={{ scale: 1.12 }}
                         whileTap={{ scale: 0.85 }}
-                        className={`absolute right-5 top-5 z-10 grid h-11 w-11 place-items-center rounded-full bg-white shadow-lg transition-colors duration-300 ${
-                            wishlisted ? "text-rose-600" : "text-[#25231F] hover:text-rose-500"
-                        }`}
+                        className={`absolute right-5 top-5 z-10 grid h-11 w-11 place-items-center rounded-full bg-white shadow-lg transition-colors duration-300 ${wishlisted ? "text-rose-600" : "text-[#25231F] hover:text-rose-500"
+                            }`}
                     >
                         <motion.span
                             key={wishlisted ? "on" : "off"}
@@ -489,9 +488,8 @@ function Gallery({ images, name, badge, wishlisted, onWishlist, index, setIndex 
                             <img
                                 src={src}
                                 alt={`${name} thumbnail ${i + 1}`}
-                                className={`h-full w-full object-cover transition duration-500 ${
-                                    i === index ? "opacity-100" : "opacity-60 hover:opacity-100"
-                                }`}
+                                className={`h-full w-full object-cover transition duration-500 ${i === index ? "opacity-100" : "opacity-60 hover:opacity-100"
+                                    }`}
                             />
                             {i === index && (
                                 <motion.span
@@ -830,8 +828,8 @@ export default function ProductDetails() {
         } catch (error) {
             showToast(
                 error.response?.data?.message ||
-                    error.message ||
-                    "Unable to update wishlist.",
+                error.message ||
+                "Unable to update wishlist.",
                 "error"
             );
         }
@@ -1029,9 +1027,8 @@ export default function ProductDetails() {
                                                     />
                                                 )}
                                                 <span
-                                                    className={`relative h-7 w-7 rounded-full border border-black/10 transition-opacity duration-300 ${
-                                                        available ? "opacity-100" : "opacity-35"
-                                                    }`}
+                                                    className={`relative h-7 w-7 rounded-full border border-black/10 transition-opacity duration-300 ${available ? "opacity-100" : "opacity-35"
+                                                        }`}
                                                     style={{
                                                         backgroundColor: colorOptions[color] || "#B89B72",
                                                     }}
@@ -1069,13 +1066,12 @@ export default function ProductDetails() {
                                                 onClick={() => setSelectedSize(size)}
                                                 whileHover={{ y: -2 }}
                                                 whileTap={{ scale: 0.94 }}
-                                                className={`relative min-w-12 border px-4 py-3 text-xs transition-colors duration-300 ${
-                                                    active
+                                                className={`relative min-w-12 border px-4 py-3 text-xs transition-colors duration-300 ${active
                                                         ? "border-[#25231F] text-white"
                                                         : available
-                                                        ? "border-[#DCD4C8] hover:border-[#B89B72]"
-                                                        : "border-[#E9E3DA] text-[#B5AEA3] line-through"
-                                                }`}
+                                                            ? "border-[#DCD4C8] hover:border-[#B89B72]"
+                                                            : "border-[#E9E3DA] text-[#B5AEA3] line-through"
+                                                    }`}
                                             >
                                                 {active && (
                                                     <motion.span
@@ -1171,9 +1167,8 @@ export default function ProductDetails() {
                                 disabled={stock <= 0}
                                 whileHover={stock > 0 ? { scale: 1.015 } : undefined}
                                 whileTap={stock > 0 ? { scale: 0.98 } : undefined}
-                                className={`group relative flex w-full items-center justify-center gap-3 overflow-hidden px-6 py-5 text-xs font-semibold tracking-[2px] text-white transition-colors duration-500 disabled:cursor-not-allowed disabled:opacity-50 ${
-                                    added ? "bg-[#718B66]" : "bg-[#25231F] hover:bg-[#B89B72]"
-                                }`}
+                                className={`group relative flex w-full items-center justify-center gap-3 overflow-hidden px-6 py-5 text-xs font-semibold tracking-[2px] text-white transition-colors duration-500 disabled:cursor-not-allowed disabled:opacity-50 ${added ? "bg-[#718B66]" : "bg-[#25231F] hover:bg-[#B89B72]"
+                                    }`}
                             >
                                 <span className="pointer-events-none absolute inset-y-0 left-0 w-1/3 -skew-x-12 bg-white/20 animate-[pdShimmer_3.6s_ease-in-out_infinite]" />
 

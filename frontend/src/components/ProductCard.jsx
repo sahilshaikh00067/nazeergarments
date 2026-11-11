@@ -14,7 +14,10 @@ export default function ProductCard({ product, onAddToCart }) {
   const navigate = useNavigate();
 
   const [wishlistLoading, setWishlistLoading] = useState(false);
-  const productImage = product.images?.[0]?.image || "";
+  const productImage =
+    product.image ||
+    product.images?.[0] ||
+    "";
   const [imageFailed, setImageFailed] = useState(false);
   useEffect(() => {
     setImageFailed(false);
@@ -31,40 +34,40 @@ export default function ProductCard({ product, onAddToCart }) {
     ? Math.round(((originalPrice - price) / originalPrice) * 100)
     : 0;
 
-const handleWishlist = async (e) => {
-  e.preventDefault();
-  e.stopPropagation();
+  const handleWishlist = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
 
-  if (!isAuthenticated) {
-    navigate("/login");
-    return;
-  }
-
-  if (wishlistLoading) return;
-
-  setWishlistLoading(true);
-
-  try {
-    if (liked) {
-      await removeItem(product.id);
-      console.log("Wishlist: Product removed", product.id);
-    } else {
-      await addItem(product.id);
-      console.log("Wishlist: Product added", product.id);
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
     }
-  } catch (error) {
-    console.error("Wishlist error:", error);
-    console.error("Status:", error.response?.status);
-    console.error("Response:", error.response?.data);
-    alert(
-      error.response?.data?.message ||
-      error.response?.data?.detail ||
-      "Wishlist update failed. Please try again."
-    );
-  } finally {
-    setWishlistLoading(false);
-  }
-};
+
+    if (wishlistLoading) return;
+
+    setWishlistLoading(true);
+
+    try {
+      if (liked) {
+        await removeItem(product.id);
+        console.log("Wishlist: Product removed", product.id);
+      } else {
+        await addItem(product.id);
+        console.log("Wishlist: Product added", product.id);
+      }
+    } catch (error) {
+      console.error("Wishlist error:", error);
+      console.error("Status:", error.response?.status);
+      console.error("Response:", error.response?.data);
+      alert(
+        error.response?.data?.message ||
+        error.response?.data?.detail ||
+        "Wishlist update failed. Please try again."
+      );
+    } finally {
+      setWishlistLoading(false);
+    }
+  };
 
   const openProduct = () => {
     if (product.slug) {
@@ -89,8 +92,10 @@ const handleWishlist = async (e) => {
               src={productImage}
               alt={product.name}
               loading="lazy"
-              onError={() => setImageFailed(true)}
-              className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+              className="..."
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
             />
           ) : (
             <div className="grid h-full w-full place-items-center text-xs tracking-widest text-[#A39C93]">
@@ -117,22 +122,21 @@ const handleWishlist = async (e) => {
         )}
 
         {/* WISHLIST */}
-<button
-  type="button"
-  onClick={handleWishlist}
-  disabled={wishlistLoading}
-  aria-label={liked ? "Remove from wishlist" : "Add to wishlist"}
-  aria-pressed={liked}
-  className={`absolute right-3 top-3 z-30 grid h-10 w-10 place-items-center rounded-full bg-white shadow-md ${
-    liked ? "text-rose-600" : "text-[#25231F]"
-  } ${wishlistLoading ? "cursor-wait opacity-60" : ""}`}
->
-  <Heart
-    size={17}
-    strokeWidth={1.7}
-    fill={liked ? "currentColor" : "none"}
-  />
-</button>
+        <button
+          type="button"
+          onClick={handleWishlist}
+          disabled={wishlistLoading}
+          aria-label={liked ? "Remove from wishlist" : "Add to wishlist"}
+          aria-pressed={liked}
+          className={`absolute right-3 top-3 z-30 grid h-10 w-10 place-items-center rounded-full bg-white shadow-md ${liked ? "text-rose-600" : "text-[#25231F]"
+            } ${wishlistLoading ? "cursor-wait opacity-60" : ""}`}
+        >
+          <Heart
+            size={17}
+            strokeWidth={1.7}
+            fill={liked ? "currentColor" : "none"}
+          />
+        </button>
 
         {/* QUICK ADD */}
         <button

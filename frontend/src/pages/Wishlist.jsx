@@ -43,8 +43,8 @@ const coarsePointer = () =>
   window.matchMedia?.("(pointer: coarse)").matches;
 
 const getImages = (p) => {
-  const list = (p.images || [])
-    .map((i) => (typeof i === "string" ? i : i?.image))
+const list = (p.images || [])
+    .map(i => typeof i === "string" ? i : i?.image)
     .filter(Boolean);
   return list.length ? list : p.image ? [p.image] : [];
 };
