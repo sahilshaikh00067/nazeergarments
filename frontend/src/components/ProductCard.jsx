@@ -1,6 +1,6 @@
 
 import { Heart, ShoppingBag, Star, ArrowUpRight } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -14,12 +14,16 @@ export default function ProductCard({ product, onAddToCart }) {
   const navigate = useNavigate();
 
   const [wishlistLoading, setWishlistLoading] = useState(false);
+  const productImage = product.images?.[0]?.image || "";
+  const [imageFailed, setImageFailed] = useState(false);
+  useEffect(() => {
+    setImageFailed(false);
+  }, [productImage]);
 
   const liked = isWishlisted(product.id);
 
   const price = Number(product.price || 0);
-  const originalPrice = Number(product.originalPrice || 0);
-
+  const originalPrice = Number(product.mrp || 0);
   const hasDiscount =
     originalPrice > 0 && originalPrice > price;
 
@@ -57,6 +61,8 @@ export default function ProductCard({ product, onAddToCart }) {
   const openProduct = () => {
     if (product.slug) {
       navigate(`/product/${product.slug}`);
+    } else if (product.id) {
+      navigate(`/product/${product.id}`);
     }
   };
 
@@ -70,11 +76,12 @@ export default function ProductCard({ product, onAddToCart }) {
           className="absolute inset-0 h-full w-full cursor-pointer"
           aria-label={`View ${product.name}`}
         >
-          {product.image ? (
+          {productImage && !imageFailed ? (
             <img
-              src={product.image}
+              src={productImage}
               alt={product.name}
               loading="lazy"
+              onError={() => setImageFailed(true)}
               className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
             />
           ) : (
@@ -110,11 +117,10 @@ export default function ProductCard({ product, onAddToCart }) {
             liked ? "Remove from wishlist" : "Add to wishlist"
           }
           aria-pressed={liked}
-          className={`absolute right-3 top-3 z-20 grid h-9 w-9 place-items-center rounded-full bg-white shadow-md transition-all duration-300 hover:scale-110 sm:right-4 sm:top-4 sm:h-10 sm:w-10 ${
-            liked
-              ? "text-rose-600"
-              : "text-[#25231F] hover:text-rose-600"
-          } ${wishlistLoading ? "cursor-wait opacity-60" : ""}`}
+          className={`absolute right-3 top-3 z-20 grid h-9 w-9 place-items-center rounded-full bg-white shadow-md transition-all duration-300 hover:scale-110 sm:right-4 sm:top-4 sm:h-10 sm:w-10 ${liked
+            ? "text-rose-600"
+            : "text-[#25231F] hover:text-rose-600"
+            } ${wishlistLoading ? "cursor-wait opacity-60" : ""}`}
         >
           <Heart
             size={17}
@@ -138,8 +144,9 @@ export default function ProductCard({ product, onAddToCart }) {
       <div className="px-0.5 pt-4 sm:pt-5">
         <div className="mb-2 flex items-center justify-between gap-2">
           <p className="truncate text-[9px] font-semibold uppercase tracking-[1.7px] text-[#A48754]">
-            {product.categoryLabel || product.category || "Collection"}
-          </p>
+            {product.category?.name ||
+              product.categoryLabel ||
+              (typeof product.category === "string" ? product.category : "Collection")}          </p>
 
           <ArrowUpRight
             size={14}
@@ -177,7 +184,7 @@ export default function ProductCard({ product, onAddToCart }) {
         </div>
 
         {/* RATING */}
-        {Number(product.rating) > 0 && (
+        {Number(product.average_rating) > 0 && (
           <div className="mt-3 flex items-center gap-1.5">
             <Star
               size={12}
@@ -186,7 +193,7 @@ export default function ProductCard({ product, onAddToCart }) {
             />
 
             <span className="text-[10px] font-semibold text-[#625D55]">
-              {Number(product.rating).toFixed(1)}
+              {Number(product.average_rating).toFixed(1)}
             </span>
 
             <span className="text-[9px] text-[#A39C93]">

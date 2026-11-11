@@ -26,17 +26,25 @@ export function WishlistProvider({ children }) {
   const loadWishlist = useCallback(async () => {
     if (!isAuthenticated) {
       setWishlist([]);
+      setLoading(false);
       return;
     }
 
     setLoading(true);
 
     try {
-      const data = await getWishlist();
-      setWishlist(data.wishlist || []);
+      const response = await getWishlist();
+
+      const items = Array.isArray(response?.wishlist)
+        ? response.wishlist
+        : [];
+
+      setWishlist(items);
+      return items;
     } catch (error) {
       console.error("Wishlist loading failed:", error);
-      setWishlist([]);
+      console.error("Wishlist API response:", error.response?.data);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -45,13 +53,14 @@ export function WishlistProvider({ children }) {
   useEffect(() => {
     if (authLoading) return;
 
-    if (isAuthenticated) {
-      loadWishlist();
-    } else {
+    if (!isAuthenticated) {
       setWishlist([]);
       setLoading(false);
+      return;
     }
-  }, [isAuthenticated, authLoading, loadWishlist]);
+
+    loadWishlist().catch(() => {});
+  }, [authLoading, isAuthenticated, loadWishlist]);
 
   const addItem = async (productId) => {
     if (!isAuthenticated) {
@@ -65,20 +74,22 @@ export function WishlistProvider({ children }) {
     return result;
   };
 
-  const removeItem = async (productId) => {
-    await removeFromWishlist(productId);
+const removeItem = async (productId) => {
+  await removeFromWishlist(productId);
 
-    setWishlist((current) =>
-      current.filter(
-        (item) => Number(item.product.id) !== Number(productId)
-      )
-    );
-  };
+  setWishlist((current) =>
+    current.filter(
+      (item) =>
+        Number(item?.product?.id) !== Number(productId)
+    )
+  );
+};
 
-  const isWishlisted = (productId) =>
-    wishlist.some(
-      (item) => Number(item.product.id) === Number(productId)
-    );
+const isWishlisted = (productId) =>
+  wishlist.some(
+    (item) =>
+      Number(item?.product?.id) === Number(productId)
+  );
 
   return (
     <WishlistContext.Provider
