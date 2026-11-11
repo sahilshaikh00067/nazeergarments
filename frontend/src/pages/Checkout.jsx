@@ -121,7 +121,7 @@ export default function Checkout() {
         refundReview: Boolean(
           response.data.late_payment_needs_refund
         ),
-status: response.data.order_status || "pending",
+        status: response.data.order_status || "pending",
       });
     } catch (err) {
       setError(
@@ -195,6 +195,16 @@ status: response.data.order_status || "pending",
       setError("Your shopping bag is empty.");
       return;
     }
+    if (!isAuthenticated) {
+      navigate("/login", {
+        state: {
+          from: {
+            pathname: "/checkout",
+          },
+        },
+      });
+      return;
+    }
 
     if (pendingOrder) {
       setError(
@@ -249,21 +259,21 @@ status: response.data.order_status || "pending",
         return;
       }
 
-setPendingOrder(order);
+      setPendingOrder(order);
 
-if (
-    !order.razorpay_order_id ||
-    !order.key_id ||
-    !order.amount
-) {
-    setError(
-        "Order created, but Razorpay details are missing. Please contact support with Order ID: " +
-        order.order_id
-    );
-    return;
-}
+      if (
+        !order.razorpay_order_id ||
+        !order.key_id ||
+        !order.amount
+      ) {
+        setError(
+          "Order created, but Razorpay details are missing. Please contact support with Order ID: " +
+          order.order_id
+        );
+        return;
+      }
 
-await openRazorpay(order);
+      await openRazorpay(order);
     } catch (err) {
       setError(getErrorMessage(err));
     } finally {
@@ -411,8 +421,8 @@ await openRazorpay(order);
                       required
                       maxLength={
                         name === "phone" ? 10 :
-                        name === "pincode" ? 6 :
-                        undefined
+                          name === "pincode" ? 6 :
+                            undefined
                       }
                       className="w-full border border-[#DCD4C8] px-4 py-3 text-sm outline-none focus:border-[#A48754]"
                     />
@@ -461,11 +471,10 @@ await openRazorpay(order);
                 ].map(([value, title, description]) => (
                   <label
                     key={value}
-                    className={`flex cursor-pointer gap-4 border p-4 ${
-                      form.payment_method === value
+                    className={`flex cursor-pointer gap-4 border p-4 ${form.payment_method === value
                         ? "border-[#A48754] bg-[#FAF8F3]"
                         : "border-[#E5DED3]"
-                    }`}
+                      }`}
                   >
                     <input
                       type="radio"

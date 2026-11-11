@@ -56,23 +56,32 @@ class CheckoutThrottle(AnonRateThrottle):
 
 
 @api_view(["POST"])
-@permission_classes([AllowAny])  # guest checkout; gate with a store setting if disabled
+@permission_classes([IsAuthenticated])
 @throttle_classes([CheckoutThrottle])
 def checkout(request):
     s = CheckoutS(data=request.data)
     s.is_valid(raise_exception=True)
+
     return Response(
-    services.place_order(request.user, s.validated_data),
-    status=201
-)
+        services.place_order(request.user, s.validated_data),
+        status=201
+    )
+
+
 
 
 @api_view(["POST"])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])
 def payment_verify(request):
     d = request.data
-    order = services.verify_payment(d.get("order_id"), d.get("razorpay_order_id"),
-    d.get("razorpay_payment_id"), d.get("razorpay_signature"))
+
+    order = services.verify_payment(
+        request.user,
+        d.get("order_id"),
+        d.get("razorpay_order_id"),
+        d.get("razorpay_payment_id"),
+        d.get("razorpay_signature"),
+    )
 
     return Response({
         "order_id": order.order_id,
@@ -85,6 +94,8 @@ def payment_verify(request):
             else None
         ),
     })
+
+
 
 @csrf_exempt
 def razorpay_webhook(request):

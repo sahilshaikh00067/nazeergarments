@@ -37,8 +37,7 @@ function App() {
         <Route path="/shop" element={<Shop />} />
         <Route path="/shop/:category" element={<Shop />} />
         <Route path="/product/:id" element={<ProductDetails />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
+
 
         {/* Authentication */}
         <Route path="/login" element={<Login />} />
@@ -48,6 +47,8 @@ function App() {
 
         {/* Customer protected pages */}
         <Route element={<ProtectedRoute />}>
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/account" element={<Account />} />
           <Route path="/my-orders" element={<MyOrders />} />
           <Route path="/wishlist" element={<Wishlist />} />

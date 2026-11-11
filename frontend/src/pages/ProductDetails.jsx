@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+    Link,
+    useNavigate,
+    useParams,
+    useLocation,
+} from "react-router-dom";
 import {
     AnimatePresence,
     animate,
@@ -61,6 +66,7 @@ const colorOptions = {
     Gold: "#C6A15B",
 };
 
+const location = useLocation();
 const toUrl = (value) => {
     if (!value) return "";
 
@@ -580,6 +586,7 @@ export default function ProductDetails() {
     const { isAuthenticated } = useAuth();
     const { id } = useParams();
     const navigate = useNavigate();
+    const location = useLocation();
 
     const [product, setProduct] = useState(null);
     const [relatedProducts, setRelatedProducts] = useState([]);
@@ -795,10 +802,19 @@ export default function ProductDetails() {
         );
 
     const addToCart = () => {
-        if (!selectedSize || !selectedColor) {
-            showToast("Please select a size and color", "error");
+
+        if (!isAuthenticated) {
+            navigate("/login", {
+                state: { from: location },
+            });
             return;
         }
+
+        if (!selectedSize || !selectedColor) {
+            setToast("Please select a size and color");
+            return;
+        }
+
 
         if (!selectedVariant || stock <= 0) {
             showToast("This size and color combination is out of stock", "error");

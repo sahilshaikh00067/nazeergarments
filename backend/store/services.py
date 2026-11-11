@@ -374,13 +374,14 @@ def _signature_ok(body: str, sig: str, secret: str) -> bool:
 
 
 @transaction.atomic
-def verify_payment(order_id, rp_order_id, rp_payment_id, signature):
+def verify_payment(user, order_id, rp_order_id, rp_payment_id, signature):
     order = (
         Order.objects
         .select_for_update()
         .filter(
             order_id=order_id,
             razorpay_order_id=rp_order_id,
+            user=user,
         )
         .first()
     )

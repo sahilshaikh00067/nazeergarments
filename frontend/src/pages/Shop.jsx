@@ -902,7 +902,13 @@ export default function Shop() {
     };
 
     const addToCart = (product) => {
-        const variants = product.variants || [];
+        if (!isAuthenticated) {
+            navigate("/login", {
+                state: { from: location },
+                replace: false,
+            });
+            return;
+        } const variants = product.variants || [];
 
         const availableVariants = variants.filter(isVariantInStock);
 

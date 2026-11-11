@@ -3,7 +3,7 @@ import { Heart, ShoppingBag, Star, ArrowUpRight } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useWishlist } from "../context/WishlistContext";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const formatPrice = (price) =>
   `₹${Number(price || 0).toLocaleString("en-IN")}`;
@@ -12,6 +12,7 @@ export default function ProductCard({ product, onAddToCart }) {
   const { addItem, removeItem, isWishlisted } = useWishlist();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [wishlistLoading, setWishlistLoading] = useState(false);
   const productImage =
@@ -77,6 +78,8 @@ export default function ProductCard({ product, onAddToCart }) {
     }
   };
 
+
+
   return (
     <article className="group min-w-0">
       {/* PRODUCT IMAGE */}
@@ -141,8 +144,19 @@ export default function ProductCard({ product, onAddToCart }) {
         {/* QUICK ADD */}
         <button
           type="button"
-          onClick={() => onAddToCart?.(product)}
-          className="absolute bottom-3 right-3 z-20 flex items-center justify-center gap-2 bg-white px-4 py-3 text-[9px] font-bold tracking-[1.3px] text-[#25231F] shadow-md transition-all duration-300 hover:bg-[#25231F] hover:text-white sm:bottom-4 sm:left-4 sm:right-4 sm:translate-y-3 sm:justify-center sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (!isAuthenticated) {
+              navigate("/login", {
+                state: { from: location },
+              });
+              return;
+            }
+
+            onAddToCart?.(product);
+          }} className="absolute bottom-3 right-3 z-20 flex items-center justify-center gap-2 bg-white px-4 py-3 text-[9px] font-bold tracking-[1.3px] text-[#25231F] shadow-md transition-all duration-300 hover:bg-[#25231F] hover:text-white sm:bottom-4 sm:left-4 sm:right-4 sm:translate-y-3 sm:justify-center sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
         >
           <ShoppingBag size={14} strokeWidth={1.8} />
           ADD TO BAG
