@@ -3,9 +3,10 @@ djangorestframework
 django-cors-headers
 psycopg[binary]
 razorpay
-Pillow
+Pillow>=10.0.0
 python-dotenv
 gunicorn
 djangorestframework-simplejwt==5.5.1
-Pillow>=10.0.0
 whitenoise
+cloudinary
+django-cloudinary-storage

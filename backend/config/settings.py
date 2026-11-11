@@ -1,7 +1,7 @@
 
 """
 Django settings for config project.
-Production-ready configuration for Render + PostgreSQL.
+Production-ready configuration for Render + PostgreSQL + Cloudinary.
 """
 
 import os
@@ -13,7 +13,6 @@ from dotenv import load_dotenv
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Load local .env file during development.
-# Render environment variables are read automatically.
 load_dotenv(BASE_DIR / ".env")
 
 
@@ -30,11 +29,12 @@ if not SECRET_KEY:
     )
 
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+
 ALLOWED_HOSTS = [
     host.strip()
     for host in os.getenv(
         "ALLOWED_HOSTS",
-        "localhost,127.0.0.1"
+        "localhost,127.0.0.1,nazeergarments.onrender.com"
     ).split(",")
     if host.strip()
 ]
@@ -43,7 +43,7 @@ CSRF_TRUSTED_ORIGINS = [
     origin.strip()
     for origin in os.getenv(
         "CSRF_TRUSTED_ORIGINS",
-        "http://localhost:5173,http://127.0.0.1:5173"
+        "http://localhost:5173,http://127.0.0.1:5173,https://nazeergarments.vercel.app"
     ).split(",")
     if origin.strip()
 ]
@@ -56,6 +56,25 @@ CSRF_TRUSTED_ORIGINS = [
 RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID", "")
 RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET", "")
 RAZORPAY_WEBHOOK_SECRET = os.getenv("RAZORPAY_WEBHOOK_SECRET", "")
+
+
+# --------------------------------------------------
+# CLOUDINARY
+# --------------------------------------------------
+
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME", ""),
+    "API_KEY": os.getenv("CLOUDINARY_API_KEY", ""),
+    "API_SECRET": os.getenv("CLOUDINARY_API_SECRET", ""),
+}
+
+# Fail early if Cloudinary credentials are missing.
+if not all(CLOUDINARY_STORAGE.values()):
+    raise RuntimeError(
+        "Cloudinary credentials are missing. Set "
+        "CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY "
+        "and CLOUDINARY_API_SECRET."
+    )
 
 
 # --------------------------------------------------
@@ -72,6 +91,9 @@ INSTALLED_APPS = [
 
     "rest_framework",
     "corsheaders",
+
+    "cloudinary_storage",
+    "cloudinary",
 
     "store",
     "rest_framework_simplejwt.token_blacklist",
@@ -105,7 +127,7 @@ CORS_ALLOWED_ORIGINS = [
     origin.strip()
     for origin in os.getenv(
         "CORS_ALLOWED_ORIGINS",
-        "http://localhost:5173,http://127.0.0.1:5173"
+        "http://localhost:5173,http://127.0.0.1:5173,https://nazeergarments.vercel.app"
     ).split(",")
     if origin.strip()
 ]
@@ -203,7 +225,17 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "/media/"
 
+# Local fallback directory. Default storage below is Cloudinary.
 MEDIA_ROOT = BASE_DIR / "media"
+
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 
 # --------------------------------------------------
@@ -283,6 +315,10 @@ FRONTEND_URL = os.getenv(
     "https://nazeergarments.vercel.app"
 ).rstrip("/")
 
+
+# --------------------------------------------------
+# LOGGING
+# --------------------------------------------------
 
 LOGGING = {
     "version": 1,
