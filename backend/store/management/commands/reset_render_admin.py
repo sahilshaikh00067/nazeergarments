@@ -26,8 +26,8 @@ class Command(BaseCommand):
 
         user = users.first()
 
-        if user.email.lower() != email.lower():
-            raise CommandError("ADMIN_EMAIL does not match the existing user's email.")
+        self.stdout.write(f"Existing username: {user.username}")
+        self.stdout.write(f"Existing email: {user.email}")
 
         try:
             validate_password(password, user)
