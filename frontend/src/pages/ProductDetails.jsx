@@ -66,7 +66,6 @@ const colorOptions = {
     Gold: "#C6A15B",
 };
 
-const location = useLocation();
 const toUrl = (value) => {
     if (!value) return "";
 

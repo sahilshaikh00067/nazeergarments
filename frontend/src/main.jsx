@@ -11,18 +11,14 @@ import { WishlistProvider } from "./context/WishlistContext";
 
 import "./index.css";
 
-ReactDOM.createRoot(
-  document.getElementById("root")
-).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <AuthProvider>
-        <CartProvider>
-          <WishlistProvider>
-            <App />
-          </WishlistProvider>
-        </CartProvider>
-      </AuthProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+ReactDOM.createRoot(document.getElementById("root")).render(
+  <BrowserRouter>
+    <AuthProvider>
+      <CartProvider>
+        <WishlistProvider>
+          <App />
+        </WishlistProvider>
+      </CartProvider>
+    </AuthProvider>
+  </BrowserRouter>
 );
