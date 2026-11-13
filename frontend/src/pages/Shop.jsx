@@ -1152,7 +1152,7 @@ export default function Shop() {
                             className="mb-4 inline-flex items-center gap-3 text-[10px] font-semibold tracking-[4px] text-[#A48754]"
                         >
                             <span className="h-px w-8 bg-[#A48754]" />
-                            THE ZAZEER COLLECTION
+                            THE NAZEER COLLECTION
                             <span className="h-px w-8 bg-[#A48754]" />
                         </motion.p>
 

@@ -346,7 +346,7 @@ export default function Footer() {
           <motion.div variants={itemVariants} className="col-span-2 lg:col-span-1">
             <Link to="/" className="group inline-flex flex-col">
               <span className="font-serif text-[34px] font-semibold leading-none tracking-[3px] text-white transition-all duration-500 group-hover:tracking-[5px] group-hover:text-[#D7BD98]">
-                ZAZEER
+                NAZEER
               </span>
               <span className="mt-2 pl-1 text-[8px] font-semibold tracking-[7px] text-[#C5A77D] transition-all duration-500 group-hover:tracking-[9px]">
                 GARMENTS
@@ -413,7 +413,7 @@ export default function Footer() {
       <div className="relative border-t border-white/[0.08] bg-[#171613]">
         <div className="mx-auto flex max-w-[1400px] flex-col items-center justify-between gap-3 px-6 py-4 text-center sm:px-10 md:flex-row md:text-left lg:px-16">
           <p className="text-[9px] tracking-[0.8px] text-white/40">
-            © {currentYear} ZAZEER GARMENTS. ALL RIGHTS RESERVED.
+            © {currentYear} NAZEER GARMENTS. ALL RIGHTS RESERVED.
           </p>
 
           <span className="hidden text-[9px] font-semibold tracking-[2px] text-white/35 lg:block">
